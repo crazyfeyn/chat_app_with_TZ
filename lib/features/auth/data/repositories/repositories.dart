@@ -26,7 +26,7 @@ class AuthRepositoriesImpl extends AuthRepositories {
     try {
       final user = await log();
       if (user != null && user['password'] == password) {
-        return const Right(null); // Login successful
+        return const Right(null);
       } else {
         return Left(ServerFailure(message: 'Incorrect email or password'));
       }
@@ -39,7 +39,7 @@ class AuthRepositoriesImpl extends AuthRepositories {
       Future<int> Function() register) async {
     try {
       await register();
-      return const Right(null); // Registration successful
+      return const Right(null);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
