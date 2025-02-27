@@ -5,5 +5,6 @@ class AuthState with _$AuthState {
   factory AuthState({
     @Default(Status.initial) Status status,
     String? message,
+    UserModel? user,
   }) = _AuthState;
 }

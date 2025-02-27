@@ -892,7 +892,9 @@ abstract class _startNewChat implements HomeEvent {
 /// @nodoc
 mixin _$HomeState {
   Status get status => throw _privateConstructorUsedError;
-  String? get message => throw _privateConstructorUsedError;
+  List<UserModel> get users => throw _privateConstructorUsedError;
+  List<ChatMessageModel> get messages => throw _privateConstructorUsedError;
+  String? get errorMessage => throw _privateConstructorUsedError;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -906,7 +908,11 @@ abstract class $HomeStateCopyWith<$Res> {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) then) =
       _$HomeStateCopyWithImpl<$Res, HomeState>;
   @useResult
-  $Res call({Status status, String? message});
+  $Res call(
+      {Status status,
+      List<UserModel> users,
+      List<ChatMessageModel> messages,
+      String? errorMessage});
 }
 
 /// @nodoc
@@ -925,16 +931,26 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   @override
   $Res call({
     Object? status = null,
-    Object? message = freezed,
+    Object? users = null,
+    Object? messages = null,
+    Object? errorMessage = freezed,
   }) {
     return _then(_value.copyWith(
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as Status,
-      message: freezed == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
+      users: null == users
+          ? _value.users
+          : users // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
+      messages: null == messages
+          ? _value.messages
+          : messages // ignore: cast_nullable_to_non_nullable
+              as List<ChatMessageModel>,
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -948,7 +964,11 @@ abstract class _$$HomeStateImplCopyWith<$Res>
       __$$HomeStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Status status, String? message});
+  $Res call(
+      {Status status,
+      List<UserModel> users,
+      List<ChatMessageModel> messages,
+      String? errorMessage});
 }
 
 /// @nodoc
@@ -965,16 +985,26 @@ class __$$HomeStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
-    Object? message = freezed,
+    Object? users = null,
+    Object? messages = null,
+    Object? errorMessage = freezed,
   }) {
     return _then(_$HomeStateImpl(
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as Status,
-      message: freezed == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
+      users: null == users
+          ? _value._users
+          : users // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
+      messages: null == messages
+          ? _value._messages
+          : messages // ignore: cast_nullable_to_non_nullable
+              as List<ChatMessageModel>,
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -983,17 +1013,41 @@ class __$$HomeStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$HomeStateImpl implements _HomeState {
-  _$HomeStateImpl({this.status = Status.initial, this.message});
+  _$HomeStateImpl(
+      {this.status = Status.initial,
+      final List<UserModel> users = const [],
+      final List<ChatMessageModel> messages = const [],
+      this.errorMessage})
+      : _users = users,
+        _messages = messages;
 
   @override
   @JsonKey()
   final Status status;
+  final List<UserModel> _users;
   @override
-  final String? message;
+  @JsonKey()
+  List<UserModel> get users {
+    if (_users is EqualUnmodifiableListView) return _users;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_users);
+  }
+
+  final List<ChatMessageModel> _messages;
+  @override
+  @JsonKey()
+  List<ChatMessageModel> get messages {
+    if (_messages is EqualUnmodifiableListView) return _messages;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_messages);
+  }
+
+  @override
+  final String? errorMessage;
 
   @override
   String toString() {
-    return 'HomeState(status: $status, message: $message)';
+    return 'HomeState(status: $status, users: $users, messages: $messages, errorMessage: $errorMessage)';
   }
 
   @override
@@ -1002,11 +1056,19 @@ class _$HomeStateImpl implements _HomeState {
         (other.runtimeType == runtimeType &&
             other is _$HomeStateImpl &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.message, message) || other.message == message));
+            const DeepCollectionEquality().equals(other._users, _users) &&
+            const DeepCollectionEquality().equals(other._messages, _messages) &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, message);
+  int get hashCode => Object.hash(
+      runtimeType,
+      status,
+      const DeepCollectionEquality().hash(_users),
+      const DeepCollectionEquality().hash(_messages),
+      errorMessage);
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -1018,13 +1080,20 @@ class _$HomeStateImpl implements _HomeState {
 }
 
 abstract class _HomeState implements HomeState {
-  factory _HomeState({final Status status, final String? message}) =
-      _$HomeStateImpl;
+  factory _HomeState(
+      {final Status status,
+      final List<UserModel> users,
+      final List<ChatMessageModel> messages,
+      final String? errorMessage}) = _$HomeStateImpl;
 
   @override
   Status get status;
   @override
-  String? get message;
+  List<UserModel> get users;
+  @override
+  List<ChatMessageModel> get messages;
+  @override
+  String? get errorMessage;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.

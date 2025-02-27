@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter_application_1/features/auth/presentation/screens/sign_in_screen.dart';
+import 'package:flutter_application_1/features/home/presentation/bloc/home_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'server_locator.dart' as di;
 
@@ -20,6 +21,9 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) => di.sl<AuthBloc>(),
+          ),
+          BlocProvider(
+            create: (context) => di.sl<HomeBloc>(),
           ),
         ],
         child: const MaterialApp(

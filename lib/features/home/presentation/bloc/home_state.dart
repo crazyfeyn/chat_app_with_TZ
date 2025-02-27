@@ -4,6 +4,8 @@ part of 'home_bloc.dart';
 class HomeState with _$HomeState {
   factory HomeState({
     @Default(Status.initial) Status status,
-    String? message,
+    @Default([]) List<UserModel> users,
+    @Default([]) List<ChatMessageModel> messages,
+    String? errorMessage,
   }) = _HomeState;
 }

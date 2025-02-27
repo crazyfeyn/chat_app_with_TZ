@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_application_1/core/error/failure.dart';
 import 'package:flutter_application_1/features/auth/data/datasources/auth_datasources.dart';
+import 'package:flutter_application_1/features/auth/data/model/user_model.dart';
 import 'package:flutter_application_1/features/auth/domain/repositories/auth_repositories.dart';
 
 class AuthRepositoriesImpl extends AuthRepositories {
@@ -17,6 +18,20 @@ class AuthRepositoriesImpl extends AuthRepositories {
   @override
   Future<Either<Failure, void>> register(String password, String email) {
     return _register(() => authDatasources.createUser(email, password));
+  }
+
+  @override
+  Future<Either<Failure, UserModel>> getUserByEmail(String email) async {
+    try {
+      final user = await authDatasources.getUserByEmail(email);
+      if (user != null) {
+        return Right(user);
+      } else {
+        return Left(CacheFailure());
+      }
+    } catch (e) {
+      return Left(CacheFailure());
+    }
   }
 
   Future<Either<Failure, void>> _logIn(

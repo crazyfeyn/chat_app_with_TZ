@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_application_1/core/constants/app_constants.dart';
 import 'package:flutter_application_1/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:flutter_application_1/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -30,17 +29,34 @@ class _SignInScreenState extends State<SignInScreen> {
             child: BlocProvider(
               create: (context) => sl<AuthBloc>(),
               child: BlocConsumer<AuthBloc, AuthState>(
-                listener: (context, state) {
+                listener: (context, state) async {
                   if (state.status == Status.success) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomeScreen()),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          content: Text(state.message ?? 'Login successful')),
-                    );
+                    // Dispatch the getUserByEmail event after successful login
+                    context.read<AuthBloc>().add(
+                          AuthEvent.getUserByEmail(_emailController.text),
+                        );
+                  } else if (state.status == Status.userFetched) {
+                    // Navigate to HomeScreen with user details
+                    final user = state.user;
+                    if (user != null) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomeScreen(
+                            currentUserEmail: user.email,
+                            currentUserId: user.id.toString(),
+                          ),
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text(state.message ?? 'Login successful')),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('User not found')),
+                      );
+                    }
                   } else if (state.status == Status.error) {
                     // Show error dialog
                     showDialog(

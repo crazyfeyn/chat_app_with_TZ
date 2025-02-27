@@ -10,12 +10,12 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
     _$UserModelImpl(
       email: json['email'] as String,
       password: json['password'] as String,
-      uid: json['uid'] as String,
+      id: (json['id'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
     <String, dynamic>{
       'email': instance.email,
       'password': instance.password,
-      'uid': instance.uid,
+      'id': instance.id,
     };

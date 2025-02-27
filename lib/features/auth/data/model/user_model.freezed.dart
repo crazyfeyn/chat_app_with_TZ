@@ -22,7 +22,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 mixin _$UserModel {
   String get email => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
-  String get uid => throw _privateConstructorUsedError;
+  int get id => throw _privateConstructorUsedError;
 
   /// Serializes this UserModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,7 +39,7 @@ abstract class $UserModelCopyWith<$Res> {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
       _$UserModelCopyWithImpl<$Res, UserModel>;
   @useResult
-  $Res call({String email, String password, String uid});
+  $Res call({String email, String password, int id});
 }
 
 /// @nodoc
@@ -59,7 +59,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
   $Res call({
     Object? email = null,
     Object? password = null,
-    Object? uid = null,
+    Object? id = null,
   }) {
     return _then(_value.copyWith(
       email: null == email
@@ -70,10 +70,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
-      uid: null == uid
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
-              as String,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -86,7 +86,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
       __$$UserModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String email, String password, String uid});
+  $Res call({String email, String password, int id});
 }
 
 /// @nodoc
@@ -104,7 +104,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
   $Res call({
     Object? email = null,
     Object? password = null,
-    Object? uid = null,
+    Object? id = null,
   }) {
     return _then(_$UserModelImpl(
       email: null == email
@@ -115,10 +115,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
-      uid: null == uid
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
-              as String,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -127,7 +127,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserModelImpl implements _UserModel {
   _$UserModelImpl(
-      {required this.email, required this.password, required this.uid});
+      {required this.email, required this.password, required this.id});
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -137,11 +137,11 @@ class _$UserModelImpl implements _UserModel {
   @override
   final String password;
   @override
-  final String uid;
+  final int id;
 
   @override
   String toString() {
-    return 'UserModel(email: $email, password: $password, uid: $uid)';
+    return 'UserModel(email: $email, password: $password, id: $id)';
   }
 
   @override
@@ -152,12 +152,12 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
                 other.password == password) &&
-            (identical(other.uid, uid) || other.uid == uid));
+            (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, email, password, uid);
+  int get hashCode => Object.hash(runtimeType, email, password, id);
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -179,7 +179,7 @@ abstract class _UserModel implements UserModel {
   factory _UserModel(
       {required final String email,
       required final String password,
-      required final String uid}) = _$UserModelImpl;
+      required final int id}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -189,7 +189,7 @@ abstract class _UserModel implements UserModel {
   @override
   String get password;
   @override
-  String get uid;
+  int get id;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
