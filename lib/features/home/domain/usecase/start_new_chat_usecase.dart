@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter_application_1/core/error/failure.dart';
 import 'package:flutter_application_1/core/usecases/usecase.dart';
@@ -20,8 +18,9 @@ class StartNewChatParam {
   final String senderId;
   final String message;
 
-  StartNewChatParam(
-      {required this.receiverId,
-      required this.senderId,
-      required this.message});
+  StartNewChatParam({
+    required this.receiverId,
+    required this.senderId,
+    required this.message,
+  });
 }

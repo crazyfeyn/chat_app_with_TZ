@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/features/home/presentation/home_screen.dart';
+import 'package:flutter_application_1/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_application_1/server_locator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_application_1/core/constants/app_constants.dart';
