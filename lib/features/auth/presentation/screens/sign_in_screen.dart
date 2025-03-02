@@ -14,6 +14,13 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _emailController.text = 'user1@gmail.com'; // Set default email
+    _passwordController.text = 'opopop'; // Set default password
+  }
+
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();

@@ -6,57 +6,48 @@ import 'package:flutter_application_1/features/auth/domain/repositories/auth_rep
 
 class AuthRepositoriesImpl extends AuthRepositories {
   final DatabaseService authDatasources;
-  AuthRepositoriesImpl({
-    required this.authDatasources,
-  });
+
+  AuthRepositoriesImpl({required this.authDatasources});
 
   @override
-  Future<Either<Failure, void>> logIn(String password, String email) {
-    return _logIn(password, () => authDatasources.fetchUserByEmail(email));
+  Future<Either<Failure, void>> logIn(String password, String email) async {
+    try {
+      print('---------');
+      await authDatasources.getUsers();
+      final user = await authDatasources.getUserByEmail(email);
+
+      if (user != null && user.password == password) {
+        return const Right(null);
+      }
+      return Left(ServerFailure(message: 'Invalid credentials'));
+    } catch (e) {
+      return Left(ServerFailure(message: 'Login failed: ${e.toString()}'));
+    }
   }
 
   @override
-  Future<Either<Failure, void>> register(String password, String email) {
-    return _register(() => authDatasources.createUser(email, password));
+  Future<Either<Failure, void>> register(String password, String email) async {
+    try {
+      final existingUser = await authDatasources.getUserByEmail(email);
+      if (existingUser != null) {
+        return Left(ServerFailure(message: 'Email already exists'));
+      }
+
+      await authDatasources.createUser(email, password);
+      return const Right(null);
+    } catch (e) {
+      return Left(
+          ServerFailure(message: 'Registration failed: ${e.toString()}'));
+    }
   }
 
   @override
   Future<Either<Failure, UserModel>> getUserByEmail(String email) async {
     try {
       final user = await authDatasources.getUserByEmail(email);
-      if (user != null) {
-        return Right(user);
-      } else {
-        return Left(CacheFailure());
-      }
+      return user != null ? Right(user) : Left(CacheFailure());
     } catch (e) {
       return Left(CacheFailure());
-    }
-  }
-
-  Future<Either<Failure, void>> _logIn(
-    String password,
-    Future<Map<String, dynamic>?> Function() log,
-  ) async {
-    try {
-      final user = await log();
-      if (user != null && user['password'] == password) {
-        return const Right(null);
-      } else {
-        return Left(ServerFailure(message: 'Incorrect email or password'));
-      }
-    } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
-    }
-  }
-
-  Future<Either<Failure, void>> _register(
-      Future<int> Function() register) async {
-    try {
-      await register();
-      return const Right(null);
-    } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
     }
   }
 }

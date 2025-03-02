@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter_application_1/core/error/failure.dart';
 import 'package:flutter_application_1/features/auth/data/datasources/auth_datasources.dart';
@@ -25,8 +24,9 @@ class HomeRepositoriesImpl implements HomeRepositories {
   Future<Either<Failure, List<UserModel>>> getAllUsers() async {
     try {
       final userMaps = await databaseService.getUsers();
-      List<UserModel> users =
-          userMaps.map((map) => UserModel.fromJson(map)).toList();
+      List<UserModel> users = userMaps.map((map) {
+        return UserModel.fromJson(map);
+      }).toList();
       return Right(users);
     } catch (e) {
       return Left(CacheFailure());
@@ -35,10 +35,9 @@ class HomeRepositoriesImpl implements HomeRepositories {
 
   @override
   Future<Either<Failure, List<Map<String, dynamic>>>> getChatMessages(
-      String userEmail1, String userEmail2) async {
+      String email1, String email2) async {
     try {
-      final messages =
-          await databaseService.getActiveChats(userEmail1, userEmail2);
+      final messages = await databaseService.getActiveChats(email1, email2);
       return Right(messages);
     } catch (e) {
       return Left(CacheFailure());
@@ -47,13 +46,13 @@ class HomeRepositoriesImpl implements HomeRepositories {
 
   @override
   Future<Either<Failure, void>> sendImageMessage(
-      String receiverId, String senderId, File imageFile) async {
+    String receiverId,
+    String senderId,
+    File imageFile,
+  ) async {
     try {
       List<String> sortedIds = [receiverId, senderId]..sort();
-      String chatId = sortedIds.join('');
-
-      await databaseService.startImageMessage(
-          receiverId, senderId, chatId, imageFile);
+      String chatId = sortedIds.join();
       return const Right(null);
     } catch (e) {
       return Left(CacheFailure());
@@ -62,12 +61,25 @@ class HomeRepositoriesImpl implements HomeRepositories {
 
   @override
   Future<Either<Failure, void>> startNewChat(
-      String receiverId, String senderId, String message) async {
+      String receiverEmail, String senderEmail, String message) async {
     try {
-      List<String> sortedIds = [receiverId, senderId]..sort();
-      String chatId = sortedIds.join('');
+      final receiver = await databaseService.getUserByEmail(receiverEmail);
+      final sender = await databaseService.getUserByEmail(senderEmail);
 
-      await databaseService.startChat(receiverId, senderId, chatId, message);
+      if (receiver == null || sender == null) {
+        return Left(CacheFailure());
+      }
+
+      List<String> sortedIds = [receiver.id.toString(), sender.id.toString()]
+        ..sort();
+      String chatId = sortedIds.join();
+
+      await databaseService.startChat(
+        receiver.id.toString(),
+        sender.id.toString(),
+        chatId,
+        message,
+      );
       return const Right(null);
     } catch (e) {
       return Left(CacheFailure());
