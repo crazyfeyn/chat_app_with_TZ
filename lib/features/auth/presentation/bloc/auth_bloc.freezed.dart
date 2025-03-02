@@ -22,6 +22,7 @@ mixin _$AuthEvent {
     required TResult Function(String password, String email) logIn,
     required TResult Function(String password, String email) register,
     required TResult Function(String email) getUserByEmail,
+    required TResult Function(String email) logout,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -29,6 +30,7 @@ mixin _$AuthEvent {
     TResult? Function(String password, String email)? logIn,
     TResult? Function(String password, String email)? register,
     TResult? Function(String email)? getUserByEmail,
+    TResult? Function(String email)? logout,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -36,6 +38,7 @@ mixin _$AuthEvent {
     TResult Function(String password, String email)? logIn,
     TResult Function(String password, String email)? register,
     TResult Function(String email)? getUserByEmail,
+    TResult Function(String email)? logout,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -44,6 +47,7 @@ mixin _$AuthEvent {
     required TResult Function(_log value) logIn,
     required TResult Function(_reg value) register,
     required TResult Function(_getUserByEmail value) getUserByEmail,
+    required TResult Function(_logout value) logout,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -51,6 +55,7 @@ mixin _$AuthEvent {
     TResult? Function(_log value)? logIn,
     TResult? Function(_reg value)? register,
     TResult? Function(_getUserByEmail value)? getUserByEmail,
+    TResult? Function(_logout value)? logout,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -58,6 +63,7 @@ mixin _$AuthEvent {
     TResult Function(_log value)? logIn,
     TResult Function(_reg value)? register,
     TResult Function(_getUserByEmail value)? getUserByEmail,
+    TResult Function(_logout value)? logout,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -182,6 +188,7 @@ class _$logImpl implements _log {
     required TResult Function(String password, String email) logIn,
     required TResult Function(String password, String email) register,
     required TResult Function(String email) getUserByEmail,
+    required TResult Function(String email) logout,
   }) {
     return logIn(password, email);
   }
@@ -192,6 +199,7 @@ class _$logImpl implements _log {
     TResult? Function(String password, String email)? logIn,
     TResult? Function(String password, String email)? register,
     TResult? Function(String email)? getUserByEmail,
+    TResult? Function(String email)? logout,
   }) {
     return logIn?.call(password, email);
   }
@@ -202,6 +210,7 @@ class _$logImpl implements _log {
     TResult Function(String password, String email)? logIn,
     TResult Function(String password, String email)? register,
     TResult Function(String email)? getUserByEmail,
+    TResult Function(String email)? logout,
     required TResult orElse(),
   }) {
     if (logIn != null) {
@@ -216,6 +225,7 @@ class _$logImpl implements _log {
     required TResult Function(_log value) logIn,
     required TResult Function(_reg value) register,
     required TResult Function(_getUserByEmail value) getUserByEmail,
+    required TResult Function(_logout value) logout,
   }) {
     return logIn(this);
   }
@@ -226,6 +236,7 @@ class _$logImpl implements _log {
     TResult? Function(_log value)? logIn,
     TResult? Function(_reg value)? register,
     TResult? Function(_getUserByEmail value)? getUserByEmail,
+    TResult? Function(_logout value)? logout,
   }) {
     return logIn?.call(this);
   }
@@ -236,6 +247,7 @@ class _$logImpl implements _log {
     TResult Function(_log value)? logIn,
     TResult Function(_reg value)? register,
     TResult Function(_getUserByEmail value)? getUserByEmail,
+    TResult Function(_logout value)? logout,
     required TResult orElse(),
   }) {
     if (logIn != null) {
@@ -339,6 +351,7 @@ class _$regImpl implements _reg {
     required TResult Function(String password, String email) logIn,
     required TResult Function(String password, String email) register,
     required TResult Function(String email) getUserByEmail,
+    required TResult Function(String email) logout,
   }) {
     return register(password, email);
   }
@@ -349,6 +362,7 @@ class _$regImpl implements _reg {
     TResult? Function(String password, String email)? logIn,
     TResult? Function(String password, String email)? register,
     TResult? Function(String email)? getUserByEmail,
+    TResult? Function(String email)? logout,
   }) {
     return register?.call(password, email);
   }
@@ -359,6 +373,7 @@ class _$regImpl implements _reg {
     TResult Function(String password, String email)? logIn,
     TResult Function(String password, String email)? register,
     TResult Function(String email)? getUserByEmail,
+    TResult Function(String email)? logout,
     required TResult orElse(),
   }) {
     if (register != null) {
@@ -373,6 +388,7 @@ class _$regImpl implements _reg {
     required TResult Function(_log value) logIn,
     required TResult Function(_reg value) register,
     required TResult Function(_getUserByEmail value) getUserByEmail,
+    required TResult Function(_logout value) logout,
   }) {
     return register(this);
   }
@@ -383,6 +399,7 @@ class _$regImpl implements _reg {
     TResult? Function(_log value)? logIn,
     TResult? Function(_reg value)? register,
     TResult? Function(_getUserByEmail value)? getUserByEmail,
+    TResult? Function(_logout value)? logout,
   }) {
     return register?.call(this);
   }
@@ -393,6 +410,7 @@ class _$regImpl implements _reg {
     TResult Function(_log value)? logIn,
     TResult Function(_reg value)? register,
     TResult Function(_getUserByEmail value)? getUserByEmail,
+    TResult Function(_logout value)? logout,
     required TResult orElse(),
   }) {
     if (register != null) {
@@ -491,6 +509,7 @@ class _$getUserByEmailImpl implements _getUserByEmail {
     required TResult Function(String password, String email) logIn,
     required TResult Function(String password, String email) register,
     required TResult Function(String email) getUserByEmail,
+    required TResult Function(String email) logout,
   }) {
     return getUserByEmail(email);
   }
@@ -501,6 +520,7 @@ class _$getUserByEmailImpl implements _getUserByEmail {
     TResult? Function(String password, String email)? logIn,
     TResult? Function(String password, String email)? register,
     TResult? Function(String email)? getUserByEmail,
+    TResult? Function(String email)? logout,
   }) {
     return getUserByEmail?.call(email);
   }
@@ -511,6 +531,7 @@ class _$getUserByEmailImpl implements _getUserByEmail {
     TResult Function(String password, String email)? logIn,
     TResult Function(String password, String email)? register,
     TResult Function(String email)? getUserByEmail,
+    TResult Function(String email)? logout,
     required TResult orElse(),
   }) {
     if (getUserByEmail != null) {
@@ -525,6 +546,7 @@ class _$getUserByEmailImpl implements _getUserByEmail {
     required TResult Function(_log value) logIn,
     required TResult Function(_reg value) register,
     required TResult Function(_getUserByEmail value) getUserByEmail,
+    required TResult Function(_logout value) logout,
   }) {
     return getUserByEmail(this);
   }
@@ -535,6 +557,7 @@ class _$getUserByEmailImpl implements _getUserByEmail {
     TResult? Function(_log value)? logIn,
     TResult? Function(_reg value)? register,
     TResult? Function(_getUserByEmail value)? getUserByEmail,
+    TResult? Function(_logout value)? logout,
   }) {
     return getUserByEmail?.call(this);
   }
@@ -545,6 +568,7 @@ class _$getUserByEmailImpl implements _getUserByEmail {
     TResult Function(_log value)? logIn,
     TResult Function(_reg value)? register,
     TResult Function(_getUserByEmail value)? getUserByEmail,
+    TResult Function(_logout value)? logout,
     required TResult orElse(),
   }) {
     if (getUserByEmail != null) {
@@ -565,6 +589,161 @@ abstract class _getUserByEmail implements AuthEvent {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$getUserByEmailImplCopyWith<_$getUserByEmailImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$logoutImplCopyWith<$Res> implements $AuthEventCopyWith<$Res> {
+  factory _$$logoutImplCopyWith(
+          _$logoutImpl value, $Res Function(_$logoutImpl) then) =
+      __$$logoutImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String email});
+}
+
+/// @nodoc
+class __$$logoutImplCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$logoutImpl>
+    implements _$$logoutImplCopyWith<$Res> {
+  __$$logoutImplCopyWithImpl(
+      _$logoutImpl _value, $Res Function(_$logoutImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? email = null,
+  }) {
+    return _then(_$logoutImpl(
+      null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$logoutImpl implements _logout {
+  const _$logoutImpl(this.email);
+
+  @override
+  final String email;
+
+  @override
+  String toString() {
+    return 'AuthEvent.logout(email: $email)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$logoutImpl &&
+            (identical(other.email, email) || other.email == email));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, email);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$logoutImplCopyWith<_$logoutImpl> get copyWith =>
+      __$$logoutImplCopyWithImpl<_$logoutImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String password, String email) logIn,
+    required TResult Function(String password, String email) register,
+    required TResult Function(String email) getUserByEmail,
+    required TResult Function(String email) logout,
+  }) {
+    return logout(email);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String password, String email)? logIn,
+    TResult? Function(String password, String email)? register,
+    TResult? Function(String email)? getUserByEmail,
+    TResult? Function(String email)? logout,
+  }) {
+    return logout?.call(email);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String password, String email)? logIn,
+    TResult Function(String password, String email)? register,
+    TResult Function(String email)? getUserByEmail,
+    TResult Function(String email)? logout,
+    required TResult orElse(),
+  }) {
+    if (logout != null) {
+      return logout(email);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_log value) logIn,
+    required TResult Function(_reg value) register,
+    required TResult Function(_getUserByEmail value) getUserByEmail,
+    required TResult Function(_logout value) logout,
+  }) {
+    return logout(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_log value)? logIn,
+    TResult? Function(_reg value)? register,
+    TResult? Function(_getUserByEmail value)? getUserByEmail,
+    TResult? Function(_logout value)? logout,
+  }) {
+    return logout?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_log value)? logIn,
+    TResult Function(_reg value)? register,
+    TResult Function(_getUserByEmail value)? getUserByEmail,
+    TResult Function(_logout value)? logout,
+    required TResult orElse(),
+  }) {
+    if (logout != null) {
+      return logout(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _logout implements AuthEvent {
+  const factory _logout(final String email) = _$logoutImpl;
+
+  @override
+  String get email;
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$logoutImplCopyWith<_$logoutImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

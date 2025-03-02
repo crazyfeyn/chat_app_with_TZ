@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/features/auth/data/model/user_model.dart';
 import 'package:flutter_application_1/features/home/data/model/chat_message_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -41,7 +40,6 @@ class DatabaseService {
     )
   ''');
 
-    ('Creating messages table...');
     await db.execute('''
     CREATE TABLE IF NOT EXISTS messages(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,10 +55,8 @@ class DatabaseService {
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     ('Upgrading database from $oldVersion to $newVersion');
     if (oldVersion < 2) {
-      // Drop the old users table if it exists
       await db.execute('DROP TABLE IF EXISTS users');
 
-      // Recreate the users table with the correct schema
       await db.execute('''
       CREATE TABLE IF NOT EXISTS users(
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -69,7 +65,6 @@ class DatabaseService {
       )
     ''');
 
-      // Recreate the messages table
       await db.execute('''
       CREATE TABLE IF NOT EXISTS messages(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -105,9 +100,6 @@ class DatabaseService {
       );
 
       ('User created with ID: $id (Type: ${id.runtimeType})');
-      if (id == null) {
-        throw Exception('Failed to generate ID for user');
-      }
 
       return UserModel(email: email, password: password, id: id);
     } catch (e) {
@@ -119,17 +111,12 @@ class DatabaseService {
   Future<UserModel> addNewUser(UserModel user) async {
     final db = await database;
     try {
-      // Only include email and password in the userMap
       final Map<String, dynamic> userMap = {
         'email': user.email,
         'password': user.password,
       };
 
-      // Don't set the ID for new users - let the database generate it
-      // Only set ID if it's a non-null value (for existing users)
-      if (user.id != null) {
-        userMap['id'] = user.id;
-      }
+      userMap['id'] = user.id;
 
       final id = await db.insert(
         'users',
@@ -139,7 +126,6 @@ class DatabaseService {
 
       ('User added with ID: $id');
 
-      // Return user with the correct ID (either existing or newly generated)
       return UserModel(id: id, email: user.email, password: user.password);
     } catch (e) {
       ('Error adding user: $e');
@@ -197,8 +183,6 @@ class DatabaseService {
   Future<void> startChat(
       String receiverId, String senderId, String chatId, String message) async {
     final db = await database;
-    print('here');
-    print(message);
     await db.insert('messages', {
       'receiver_id': int.parse(receiverId),
       'sender_id': int.parse(senderId),
@@ -233,28 +217,17 @@ class DatabaseService {
         orderBy: 'timestamp ASC',
       );
 
-      ('Raw messages from DB: $rawMessages');
-      ('Raw messages type: ${rawMessages.runtimeType}');
-
       List<ChatMessageModel> messages = [];
       for (var map in rawMessages) {
         ('Converting message: $map');
         try {
           final model = ChatMessageModel.fromJson(map);
-          ('Converted to model: ${model.toJson()}');
           messages.add(model);
-        } catch (e) {
-          ('Error converting message: $e');
-        }
+        } catch (e) {}
       }
-
-      ('Converted messages: $messages');
-      ('Converted messages type: ${messages.runtimeType}');
-      ('First message type (if exists): ${messages.isNotEmpty ? messages.first.runtimeType : "N/A"}');
 
       return messages;
     } catch (e) {
-      ('Error in getActiveChats: $e');
       return [];
     }
   }

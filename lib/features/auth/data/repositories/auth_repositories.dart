@@ -18,7 +18,9 @@ class AuthRepositoriesImpl extends AuthRepositories {
       if (user != null && user.password == password) {
         return const Right(null);
       }
-      return Left(ServerFailure(message: 'Invalid credentials'));
+      return Left(ServerFailure(
+          message:
+              'Entered email or password might ge wrong, please try again'));
     } catch (e) {
       return Left(ServerFailure(message: 'Login failed: ${e.toString()}'));
     }

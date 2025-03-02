@@ -83,7 +83,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(status: Status.loading));
 
     final response = await getUserByEmailUsecase.call(event.email);
-    print(response);
 
     response.fold(
       (failure) {

@@ -17,8 +17,8 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void initState() {
     super.initState();
-    _emailController.text = 'user1@gmail.com'; // Set default email
-    _passwordController.text = 'opopop'; // Set default password
+    _emailController.text = 'user1@gmail.com';
+    _passwordController.text = 'opopop';
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -55,17 +55,12 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ),
                       );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            content: Text(state.message ?? 'Login successful')),
-                      );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('User not found')),
                       );
                     }
                   } else if (state.status == Status.error) {
-                    // Show error dialog
                     showDialog(
                       context: context,
                       builder: (context) {

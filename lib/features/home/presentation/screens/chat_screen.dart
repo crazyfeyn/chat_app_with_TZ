@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/features/auth/data/model/user_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_application_1/features/home/presentation/bloc/home_bloc.dart';
 import 'package:flutter_application_1/features/home/data/model/chat_message_model.dart';
@@ -78,6 +77,7 @@ class _ChatScreenState extends State<ChatScreen> {
         imageFile: imageFile,
       );
 
+      // ignore: use_build_context_synchronously
       context.read<HomeBloc>().add(HomeEvent.sendImageMessage(params));
     }
   }
@@ -150,46 +150,66 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildMessageBubble(ChatMessageModel message, bool isMe) {
+    // Format the timestamp
+    final dateTime = DateTime.fromMillisecondsSinceEpoch(message.timestamp);
+    final formattedTime = '${dateTime.hour}:${dateTime.minute}';
+
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        decoration: BoxDecoration(
-          color: isMe ? Colors.blue : Colors.grey[700],
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: message.isImage
-            ? Image.network(
-                message.message,
-                width: 200,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return const SizedBox(
+      child: Column(
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            decoration: BoxDecoration(
+              color: isMe ? Colors.blue : Colors.grey[700],
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: message.isImage
+                ? Image.network(
+                    message.message,
                     width: 200,
-                    height: 150,
-                    child: Center(
-                      child: CircularProgressIndicator(color: Colors.white),
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return const SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: Center(
-                      child: Text(
-                        'Error loading image',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  );
-                },
-              )
-            : Text(
-                message.message,
-                style: const TextStyle(color: Colors.white),
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const SizedBox(
+                        width: 200,
+                        height: 150,
+                        child: Center(
+                          child: CircularProgressIndicator(color: Colors.white),
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return const SizedBox(
+                        width: 200,
+                        height: 50,
+                        child: Center(
+                          child: Text(
+                            'Error loading image',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                : Text(
+                    message.message,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              formattedTime,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 12,
               ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:flutter_application_1/features/home/presentation/screens/chat_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_application_1/features/home/presentation/bloc/home_bloc.dart';
@@ -57,7 +58,11 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: const Color(0xFF1C1F2A),
         actions: [
           GestureDetector(
-            onTap: () {},
+            onTap: () => Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const SignInScreen()),
+              (route) => false, // This removes all previous routes
+            ),
             child: Container(
               alignment: Alignment.center,
               width: 50,
@@ -74,20 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(width: 10)
         ],
-        leading: Container(
-          alignment: Alignment.center,
-          width: 45,
-          height: 45,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(50),
-          ),
-          child: const Icon(
-            Icons.person,
-            color: Colors.white,
-          ),
-        ),
-        leadingWidth: 60,
         centerTitle: true,
         title: Text(
           widget.currentUserEmail,
