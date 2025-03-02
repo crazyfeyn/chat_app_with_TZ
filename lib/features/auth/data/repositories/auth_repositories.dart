@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_application_1/core/error/failure.dart';
-import 'package:flutter_application_1/features/auth/data/datasources/auth_datasources.dart';
+import 'package:flutter_application_1/features/auth/data/datasources/datasources.dart';
 import 'package:flutter_application_1/features/auth/data/model/user_model.dart';
 import 'package:flutter_application_1/features/auth/domain/repositories/auth_repositories.dart';
 
@@ -12,7 +12,6 @@ class AuthRepositoriesImpl extends AuthRepositories {
   @override
   Future<Either<Failure, void>> logIn(String password, String email) async {
     try {
-      print('---------');
       await authDatasources.getUsers();
       final user = await authDatasources.getUserByEmail(email);
 

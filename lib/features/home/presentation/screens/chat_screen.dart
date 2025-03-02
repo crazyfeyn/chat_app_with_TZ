@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/features/auth/data/model/user_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_application_1/features/home/presentation/bloc/home_bloc.dart';
 import 'package:flutter_application_1/features/home/data/model/chat_message_model.dart';
@@ -12,13 +13,17 @@ class ChatScreen extends StatefulWidget {
   final String receiverId;
   final String receiverName;
   final String senderId;
+  final String receiverEmail;
+  final String senderEmail;
 
   const ChatScreen({
-    Key? key,
+    super.key,
     required this.receiverId,
     required this.receiverName,
     required this.senderId,
-  }) : super(key: key);
+    required this.receiverEmail,
+    required this.senderEmail,
+  });
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -52,6 +57,8 @@ class _ChatScreenState extends State<ChatScreen> {
       receiverId: widget.receiverId,
       senderId: widget.senderId,
       message: _messageController.text.trim(),
+      receiverEmail: widget.receiverEmail,
+      senderEmail: widget.senderEmail,
     );
 
     context.read<HomeBloc>().add(HomeEvent.startNewChat(params));
@@ -94,7 +101,6 @@ class _ChatScreenState extends State<ChatScreen> {
       body: BlocConsumer<HomeBloc, HomeState>(
         listener: (context, state) {
           if (state.status == Status.success) {
-            // Scroll to bottom when new messages arrive
             WidgetsBinding.instance.addPostFrameCallback((_) {
               _scrollToBottom();
             });
@@ -130,7 +136,6 @@ class _ChatScreenState extends State<ChatScreen> {
                           itemBuilder: (context, index) {
                             final message = state.messages[index];
                             final isMe = message.senderId == widget.senderId;
-
                             return _buildMessageBubble(message, isMe);
                           },
                         ),
@@ -156,7 +161,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         child: message.isImage
             ? Image.network(
-                message.message, // Use message field as the image URL
+                message.message,
                 width: 200,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;

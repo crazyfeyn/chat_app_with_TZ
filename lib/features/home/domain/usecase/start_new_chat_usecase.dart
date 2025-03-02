@@ -17,10 +17,14 @@ class StartNewChatParam {
   final String receiverId;
   final String senderId;
   final String message;
+  final String receiverEmail;
+  final String senderEmail;
 
   StartNewChatParam({
     required this.receiverId,
     required this.senderId,
     required this.message,
+    required this.receiverEmail,
+    required this.senderEmail,
   });
 }

@@ -69,15 +69,29 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(status: Status.loading));
 
     final result = await getChatMessagesUsecase(event.usercaseParam);
+
     result.fold(
       (failure) => emit(state.copyWith(
         status: Status.error,
         errorMessage: 'Failed to fetch messages',
       )),
-      (messages) => emit(state.copyWith(
-        status: Status.success,
-        messages: messages,
-      )),
+      (messagesJsonList) {
+        try {
+          if (messagesJsonList is List<ChatMessageModel>) {
+            emit(state.copyWith(
+              status: Status.success,
+              messages: messagesJsonList,
+            ));
+          } else {
+            throw Exception('Invalid message format received');
+          }
+        } catch (e) {
+          emit(state.copyWith(
+            status: Status.error,
+            errorMessage: 'Data parsing error: ${e.toString()}',
+          ));
+        }
+      },
     );
   }
 
@@ -101,16 +115,35 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       _startNewChat event, Emitter<HomeState> emit) async {
     emit(state.copyWith(status: Status.loading));
 
-    final result = await startNewChatUsecase(event.startNewChatParam);
+    try {
+      final result = await startNewChatUsecase(event.startNewChatParam);
 
-    result.fold(
-      (failure) => emit(state.copyWith(
+      result.fold(
+        (failure) {
+          emit(state.copyWith(
+            status: Status.error,
+            errorMessage: 'Failed to start new chat: ${failure.toString()}',
+          ));
+        },
+        (success) {
+          emit(state.copyWith(
+            status: Status.success,
+          ));
+
+          // After successful chat start, trigger the get chat messages event
+          final params = UsercaseParam(
+            receiverEmail: event.startNewChatParam.receiverEmail,
+            senderEmail: event.startNewChatParam.senderEmail,
+          );
+          add(_getChatMessages(params)); // Fetch latest messages
+        },
+      );
+    } catch (e) {
+      print('Unexpected error in _startNewChatFunc: $e');
+      emit(state.copyWith(
         status: Status.error,
-        errorMessage: 'Failed to start new chat',
-      )),
-      (success) => emit(state.copyWith(
-        status: Status.success,
-      )),
-    );
+        errorMessage: 'Exception: ${e.toString()}',
+      ));
+    }
   }
 }

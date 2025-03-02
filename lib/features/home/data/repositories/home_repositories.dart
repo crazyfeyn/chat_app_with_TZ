@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/core/error/failure.dart';
-import 'package:flutter_application_1/features/auth/data/datasources/auth_datasources.dart';
+import 'package:flutter_application_1/features/auth/data/datasources/datasources.dart';
 import 'package:flutter_application_1/features/auth/data/model/user_model.dart';
+import 'package:flutter_application_1/features/home/data/model/chat_message_model.dart';
 import 'package:flutter_application_1/features/home/domain/repositories/home_repositories.dart';
 
 class HomeRepositoriesImpl implements HomeRepositories {
@@ -34,12 +36,21 @@ class HomeRepositoriesImpl implements HomeRepositories {
   }
 
   @override
-  Future<Either<Failure, List<Map<String, dynamic>>>> getChatMessages(
+  Future<Either<Failure, List<ChatMessageModel>>> getChatMessages(
       String email1, String email2) async {
     try {
       final messages = await databaseService.getActiveChats(email1, email2);
-      return Right(messages);
+
+      List<ChatMessageModel> typedMessages = [];
+      for (var msg in messages) {
+        typedMessages.add(msg);
+      }
+
+      debugPrint(
+          'Repository: Final typedMessages count: ${typedMessages.length}');
+      return Right(typedMessages);
     } catch (e) {
+      debugPrint('Repository: Error in getChatMessages: $e');
       return Left(CacheFailure());
     }
   }
@@ -60,29 +71,22 @@ class HomeRepositoriesImpl implements HomeRepositories {
   }
 
   @override
-  Future<Either<Failure, void>> startNewChat(
-      String receiverEmail, String senderEmail, String message) async {
+  Future<Either<Failure, dynamic>> startNewChat(
+      String receiverId, String senderId, String message) async {
     try {
-      final receiver = await databaseService.getUserByEmail(receiverEmail);
-      final sender = await databaseService.getUserByEmail(senderEmail);
+      final chatId = _generateChatId(senderId, receiverId);
 
-      if (receiver == null || sender == null) {
-        return Left(CacheFailure());
-      }
+      await databaseService.startChat(receiverId, senderId, chatId, message);
 
-      List<String> sortedIds = [receiver.id.toString(), sender.id.toString()]
-        ..sort();
-      String chatId = sortedIds.join();
-
-      await databaseService.startChat(
-        receiver.id.toString(),
-        sender.id.toString(),
-        chatId,
-        message,
-      );
-      return const Right(null);
+      return const Right(true);
     } catch (e) {
       return Left(CacheFailure());
     }
+  }
+
+// Helper method to generate chatId
+  String _generateChatId(String senderId, String receiverId) {
+    final ids = [int.parse(senderId), int.parse(receiverId)]..sort();
+    return ids.join();
   }
 }

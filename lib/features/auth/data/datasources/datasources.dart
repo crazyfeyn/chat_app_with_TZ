@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/features/auth/data/model/user_model.dart';
+import 'package:flutter_application_1/features/home/data/model/chat_message_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -21,7 +22,7 @@ class DatabaseService {
   Future<Database> _initDatabase() async {
     Directory dir = await getApplicationDocumentsDirectory();
     String path = join(dir.path, 'chat_app.db');
-    debugPrint('Initializing database at: $path');
+    ('Initializing database at: $path');
     return await openDatabase(
       path,
       version: 2,
@@ -31,7 +32,7 @@ class DatabaseService {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    debugPrint('Creating users table...');
+    ('Creating users table...');
     await db.execute('''
     CREATE TABLE IF NOT EXISTS users(
       id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -40,7 +41,7 @@ class DatabaseService {
     )
   ''');
 
-    debugPrint('Creating messages table...');
+    ('Creating messages table...');
     await db.execute('''
     CREATE TABLE IF NOT EXISTS messages(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -54,7 +55,7 @@ class DatabaseService {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    debugPrint('Upgrading database from $oldVersion to $newVersion');
+    ('Upgrading database from $oldVersion to $newVersion');
     if (oldVersion < 2) {
       // Drop the old users table if it exists
       await db.execute('DROP TABLE IF EXISTS users');
@@ -84,14 +85,14 @@ class DatabaseService {
 
   Future<void> clearUsers() async {
     final db = await database;
-    debugPrint('Clearing users table...');
+    ('Clearing users table...');
     await db.delete('users');
-    debugPrint('Users table cleared');
+    ('Users table cleared');
   }
 
   Future<UserModel> createUser(String email, String password) async {
     final db = await database;
-    debugPrint('Creating user with email: $email');
+    ('Creating user with email: $email');
 
     try {
       final id = await db.insert(
@@ -103,14 +104,14 @@ class DatabaseService {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-      debugPrint('User created with ID: $id (Type: ${id.runtimeType})');
+      ('User created with ID: $id (Type: ${id.runtimeType})');
       if (id == null) {
         throw Exception('Failed to generate ID for user');
       }
 
       return UserModel(email: email, password: password, id: id);
     } catch (e) {
-      debugPrint('Error creating user: $e');
+      ('Error creating user: $e');
       rethrow;
     }
   }
@@ -136,19 +137,19 @@ class DatabaseService {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-      debugPrint('User added with ID: $id');
+      ('User added with ID: $id');
 
       // Return user with the correct ID (either existing or newly generated)
       return UserModel(id: id, email: user.email, password: user.password);
     } catch (e) {
-      debugPrint('Error adding user: $e');
+      ('Error adding user: $e');
       rethrow;
     }
   }
 
   Future<UserModel?> getUserByEmail(String email) async {
     final db = await database;
-    debugPrint('Fetching user by email: $email');
+    ('Fetching user by email: $email');
 
     try {
       final result = await db.query(
@@ -158,10 +159,10 @@ class DatabaseService {
         limit: 1,
       );
 
-      debugPrint('Raw database result: $result');
+      ('Raw database result: $result');
       if (result.isNotEmpty) {
         final userMap = result.first;
-        debugPrint('Retrieved User Data: $userMap');
+        ('Retrieved User Data: $userMap');
 
         if (userMap['id'] == null) {
           throw Exception('User ID is null for email: $email');
@@ -171,24 +172,24 @@ class DatabaseService {
       }
       return null;
     } catch (e) {
-      debugPrint('Error fetching user: $e');
+      ('Error fetching user: $e');
       return null;
     }
   }
 
   Future<List<Map<String, dynamic>>> getUsers() async {
     final db = await database;
-    debugPrint('Fetching all users...');
+    ('Fetching all users...');
 
     try {
       final users = await db.query(
         'users',
         columns: ['id', 'email', 'password'],
       );
-      debugPrint('Fetched users: $users');
+      ('Fetched users: $users');
       return users;
     } catch (e) {
-      debugPrint('Error fetching users: $e');
+      ('Error fetching users: $e');
       rethrow;
     }
   }
@@ -196,31 +197,132 @@ class DatabaseService {
   Future<void> startChat(
       String receiverId, String senderId, String chatId, String message) async {
     final db = await database;
+    print('here');
+    print(message);
     await db.insert('messages', {
-      'receiver_id': receiverId,
-      'sender_id': senderId,
+      'receiver_id': int.parse(receiverId),
+      'sender_id': int.parse(senderId),
       'timestamp': DateTime.now().millisecondsSinceEpoch,
       'message': message,
       'chat_id': chatId,
     });
   }
 
-  Future<List<Map<String, dynamic>>> getActiveChats(
+  Future<List<ChatMessageModel>> getActiveChats(
       String email1, String email2) async {
-    final user1 = await getUserByEmail(email1);
-    final user2 = await getUserByEmail(email2);
+    try {
+      final user1 = await getUserByEmail(email1);
+      final user2 = await getUserByEmail(email2);
 
-    if (user1 == null || user2 == null) return [];
+      ('User2: ${user2?.toJson()}');
 
-    final sortedIds = [user1.id, user2.id]..sort();
-    final chatId = sortedIds.join();
+      if (user1 == null || user2 == null) {
+        ('One or both users not found');
+        return [];
+      }
 
+      final sortedIds = [user1.id, user2.id]..sort();
+      final chatId = sortedIds.join();
+      ('ChatId: $chatId');
+
+      final db = await database;
+      final rawMessages = await db.query(
+        'messages',
+        where: 'chat_id = ?',
+        whereArgs: [chatId],
+        orderBy: 'timestamp ASC',
+      );
+
+      ('Raw messages from DB: $rawMessages');
+      ('Raw messages type: ${rawMessages.runtimeType}');
+
+      List<ChatMessageModel> messages = [];
+      for (var map in rawMessages) {
+        ('Converting message: $map');
+        try {
+          final model = ChatMessageModel.fromJson(map);
+          ('Converted to model: ${model.toJson()}');
+          messages.add(model);
+        } catch (e) {
+          ('Error converting message: $e');
+        }
+      }
+
+      ('Converted messages: $messages');
+      ('Converted messages type: ${messages.runtimeType}');
+      ('First message type (if exists): ${messages.isNotEmpty ? messages.first.runtimeType : "N/A"}');
+
+      return messages;
+    } catch (e) {
+      ('Error in getActiveChats: $e');
+      return [];
+    }
+  }
+
+  // Add a method to send messages
+  Future<int> sendMessage(ChatMessageModel message) async {
     final db = await database;
-    return db.query(
-      'messages',
-      where: 'chat_id = ?',
-      whereArgs: [chatId],
-      orderBy: 'timestamp ASC',
-    );
+
+    try {
+      final int messageId = await db.insert(
+        'messages',
+        {
+          'receiver_id': int.parse(message.receiverId),
+          'sender_id': int.parse(message.senderId),
+          'timestamp': message.timestamp,
+          'message': message.message,
+          'chat_id': message.chatId,
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      ('Message sent with ID: $messageId');
+      return messageId;
+    } catch (e) {
+      ('Error sending message: $e');
+      rethrow;
+    }
+  }
+
+  // Add a method to get all chats for a user
+  Future<List<Map<String, dynamic>>> getUserChats(int userId) async {
+    final db = await database;
+
+    try {
+      // Get distinct chat IDs where the user is either sender or receiver
+      final List<Map<String, dynamic>> chatIds = await db.rawQuery('''
+        SELECT DISTINCT chat_id FROM messages 
+        WHERE sender_id = ? OR receiver_id = ?
+        ORDER BY timestamp DESC
+      ''', [userId, userId]);
+
+      return chatIds;
+    } catch (e) {
+      ('Error fetching user chats: $e');
+      rethrow;
+    }
+  }
+
+  // Get the last message for a chat
+  Future<ChatMessageModel?> getLastMessage(String chatId) async {
+    final db = await database;
+
+    try {
+      final List<Map<String, dynamic>> result = await db.query(
+        'messages',
+        where: 'chat_id = ?',
+        whereArgs: [chatId],
+        orderBy: 'timestamp DESC',
+        limit: 1,
+      );
+
+      if (result.isNotEmpty) {
+        return ChatMessageModel.fromJson(result.first);
+      }
+      return null;
+    } catch (e) {
+      ('Error fetching last message: $e');
+      return null;
+    }
   }
 }

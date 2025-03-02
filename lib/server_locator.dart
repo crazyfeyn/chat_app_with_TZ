@@ -1,4 +1,4 @@
-import 'package:flutter_application_1/features/auth/data/datasources/auth_datasources.dart';
+import 'package:flutter_application_1/features/auth/data/datasources/datasources.dart';
 import 'package:flutter_application_1/features/auth/data/repositories/auth_repositories.dart';
 import 'package:flutter_application_1/features/auth/domain/usecase/get_user_by_email.dart';
 import 'package:flutter_application_1/features/auth/domain/usecase/login_usecase.dart';

@@ -11,10 +11,10 @@ class HomeScreen extends StatefulWidget {
   final String currentUserId;
 
   const HomeScreen({
-    Key? key,
+    super.key,
     required this.currentUserEmail,
     required this.currentUserId,
-  }) : super(key: key);
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -24,15 +24,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Load all users when screen initializes
     context.read<HomeBloc>().add(const HomeEvent.getAllUser());
   }
 
   void _navigateToChatScreen(BuildContext context, UserModel user) {
-    print('1');
-    print(user.email);
-    print(widget.currentUserEmail);
-    print('-------');
     final params = UsercaseParam(
       receiverEmail: user.email,
       senderEmail: widget.currentUserEmail,
@@ -47,6 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
           receiverId: user.id.toString(),
           receiverName: user.email,
           senderId: widget.currentUserId,
+          receiverEmail: user.email,
+          senderEmail: widget.currentUserEmail,
         ),
       ),
     );
