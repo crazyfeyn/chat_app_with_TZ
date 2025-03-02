@@ -1,4 +1,3 @@
-// lib/features/home/data/model/chat_message_model.dart
 import 'package:flutter/foundation.dart';
 
 class ChatMessageModel {

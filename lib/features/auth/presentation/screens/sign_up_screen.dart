@@ -34,7 +34,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: BlocConsumer<AuthBloc, AuthState>(
               listener: (context, state) {
                 if (state.status == Status.success) {
-                  // Navigate to the sign-in screen on successful registration
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -42,7 +41,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   );
                 } else if (state.status == Status.error) {
-                  // Show error message
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(state.message ?? 'An error occurred'),
@@ -128,7 +126,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     InkWell(
                       onTap: () {
                         if (_formKey.currentState!.validate()) {
-                          // Dispatch the sign-up event
                           context.read<AuthBloc>().add(
                                 AuthEvent.register(
                                   _passwordController.text,

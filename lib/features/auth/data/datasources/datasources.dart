@@ -21,7 +21,6 @@ class DatabaseService {
   Future<Database> _initDatabase() async {
     Directory dir = await getApplicationDocumentsDirectory();
     String path = join(dir.path, 'chat_app.db');
-    ('Initializing database at: $path');
     return await openDatabase(
       path,
       version: 2,
@@ -31,7 +30,6 @@ class DatabaseService {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    ('Creating users table...');
     await db.execute('''
     CREATE TABLE IF NOT EXISTS users(
       id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -53,7 +51,6 @@ class DatabaseService {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    ('Upgrading database from $oldVersion to $newVersion');
     if (oldVersion < 2) {
       await db.execute('DROP TABLE IF EXISTS users');
 
@@ -124,8 +121,6 @@ class DatabaseService {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-      ('User added with ID: $id');
-
       return UserModel(id: id, email: user.email, password: user.password);
     } catch (e) {
       ('Error adding user: $e');
@@ -135,7 +130,6 @@ class DatabaseService {
 
   Future<UserModel?> getUserByEmail(String email) async {
     final db = await database;
-    ('Fetching user by email: $email');
 
     try {
       final result = await db.query(
@@ -165,7 +159,6 @@ class DatabaseService {
 
   Future<List<Map<String, dynamic>>> getUsers() async {
     final db = await database;
-    ('Fetching all users...');
 
     try {
       final users = await db.query(
@@ -198,16 +191,12 @@ class DatabaseService {
       final user1 = await getUserByEmail(email1);
       final user2 = await getUserByEmail(email2);
 
-      ('User2: ${user2?.toJson()}');
-
       if (user1 == null || user2 == null) {
-        ('One or both users not found');
         return [];
       }
 
       final sortedIds = [user1.id, user2.id]..sort();
       final chatId = sortedIds.join();
-      ('ChatId: $chatId');
 
       final db = await database;
       final rawMessages = await db.query(
@@ -223,6 +212,7 @@ class DatabaseService {
         try {
           final model = ChatMessageModel.fromJson(map);
           messages.add(model);
+          // ignore: empty_catches
         } catch (e) {}
       }
 
@@ -232,7 +222,6 @@ class DatabaseService {
     }
   }
 
-  // Add a method to send messages
   Future<int> sendMessage(ChatMessageModel message) async {
     final db = await database;
 
@@ -257,12 +246,10 @@ class DatabaseService {
     }
   }
 
-  // Add a method to get all chats for a user
   Future<List<Map<String, dynamic>>> getUserChats(int userId) async {
     final db = await database;
 
     try {
-      // Get distinct chat IDs where the user is either sender or receiver
       final List<Map<String, dynamic>> chatIds = await db.rawQuery('''
         SELECT DISTINCT chat_id FROM messages 
         WHERE sender_id = ? OR receiver_id = ?
@@ -276,7 +263,6 @@ class DatabaseService {
     }
   }
 
-  // Get the last message for a chat
   Future<ChatMessageModel?> getLastMessage(String chatId) async {
     final db = await database;
 

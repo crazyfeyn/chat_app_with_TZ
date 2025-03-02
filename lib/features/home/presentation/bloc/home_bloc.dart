@@ -130,12 +130,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             status: Status.success,
           ));
 
-          // After successful chat start, trigger the get chat messages event
           final params = UsercaseParam(
             receiverEmail: event.startNewChatParam.receiverEmail,
             senderEmail: event.startNewChatParam.senderEmail,
           );
-          add(_getChatMessages(params)); // Fetch latest messages
+          add(_getChatMessages(params));
         },
       );
     } catch (e) {

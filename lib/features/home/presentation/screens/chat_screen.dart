@@ -150,7 +150,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildMessageBubble(ChatMessageModel message, bool isMe) {
-    // Format the timestamp
     final dateTime = DateTime.fromMillisecondsSinceEpoch(message.timestamp);
     final formattedTime = '${dateTime.hour}:${dateTime.minute}';
 

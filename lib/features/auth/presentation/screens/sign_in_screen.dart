@@ -14,13 +14,6 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  @override
-  void initState() {
-    super.initState();
-    _emailController.text = 'user1@gmail.com';
-    _passwordController.text = 'opopop';
-  }
-
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -38,12 +31,10 @@ class _SignInScreenState extends State<SignInScreen> {
               child: BlocConsumer<AuthBloc, AuthState>(
                 listener: (context, state) async {
                   if (state.status == Status.success) {
-                    // Dispatch the getUserByEmail event after successful login
                     context.read<AuthBloc>().add(
                           AuthEvent.getUserByEmail(_emailController.text),
                         );
                   } else if (state.status == Status.userFetched) {
-                    // Navigate to HomeScreen with user details
                     final user = state.user;
                     if (user != null) {
                       Navigator.pushReplacement(

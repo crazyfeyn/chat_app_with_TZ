@@ -63,7 +63,7 @@ class HomeRepositoriesImpl implements HomeRepositories {
   ) async {
     try {
       List<String> sortedIds = [receiverId, senderId]..sort();
-      String chatId = sortedIds.join();
+      sortedIds.join();
       return const Right(null);
     } catch (e) {
       return Left(CacheFailure());
