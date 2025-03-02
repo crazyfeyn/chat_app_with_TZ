@@ -63,7 +63,7 @@ Clone the Repository:
 
 bash
 Copy
-git clone https://github.com/your-username/flutter-chat-app.git
+git clone https://github.com/crazyfeyn/flutter-chat-app.git
 cd flutter-chat-app
 Install Dependencies:
 
